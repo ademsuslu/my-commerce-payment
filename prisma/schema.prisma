@@ -1,0 +1,54 @@
+// This is your Prisma schema file
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Products {
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  price       Int
+  category    String
+  description String
+  image       String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  basketItems BasketItem[] // Bir ürün birden fazla sepette olabilir
+}
+
+model Basket {
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  token       String
+  basketItems BasketItem[]
+  totalPrice  Float
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model BasketItem {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  quantity  Int
+  productId String   @db.ObjectId
+  price     Float
+  Basket    Basket   @relation(fields: [basketId], references: [id])
+  Products  Products @relation(fields: [productId], references: [id]) // Her BasketItem bir ürüne ait
+  basketId  String   @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
