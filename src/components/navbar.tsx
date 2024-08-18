@@ -1,14 +1,15 @@
-import { getBasket } from "@/actions/actions"
-import  Link  from "next/link"
 
-const Navbar = async() => {
-  const basket = await getBasket()
+import Link from "next/link"
+import Basket from "./basket"
+
+const Navbar = async () => {
+
   return (
     <div className="container mx-auto flex items-center justify-between h-12 ">
       <Link href="/" className="underline">Home</Link>
-    <span>
-      <Link href="/cart" className="underline">Sepete git: {basket[0].basketItems.length}</Link>
-    </span>
+      <span>
+        <Basket />
+      </span>
     </div>
   )
 }

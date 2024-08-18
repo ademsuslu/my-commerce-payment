@@ -236,3 +236,16 @@ export const getBasket = async () => {
         throw new Error("get product hatalı")
     }
 }
+export const deleteBasketAll = async () => {
+    try {
+        // Öncelikle tüm basket item'larını siliyoruz
+        await db.basketItem.deleteMany({});
+
+        // Daha sonra tüm basket'leri siliyoruz
+        //  await db.basket.deleteMany({});
+
+        return { message: "Tüm ürünler başarıyla silindi." };
+    } catch (error) {
+        throw new Error("Sepet ve ürünleri silme işlemi hatalı");
+    }
+}
